@@ -1,0 +1,129 @@
+.App {
+  text-align: center;
+}
+
+.Welcome-header {
+  text-align: center;
+  background-color: #f6f7f8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.Font {
+  font-size: calc(10px + 1vmin);
+  color: #2e3e48;
+}
+
+.App-header {
+  background-color: #823400;
+  background-image: url("https://www.transparenttextures.com/patterns/wood-pattern.png");
+  top: 0px;
+  height: 30vmin;
+  min-height: 50px;
+  max-height: 200px;  
+  text-align: center;
+}
+
+.Zba-logo {
+  height: 30vmin;
+  min-height: 50px;
+  max-height: 200px;
+  pointer-events: none;
+}
+
+.App-out {
+  animation: fade-out 500ms linear;
+}
+
+.App-in {
+  animation: fade-in 500ms linear;
+}
+
+.wrapper { 
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.column1 {
+  min-height: 20px;
+  min-width: 70vmin;
+  width: 30%;
+}
+
+.column2 {
+  min-height: 20px;
+  min-width: 70vmin;
+  width: 59%;
+}
+
+.inside {
+  margin-left: 10vmin;
+  margin-top: 10vmin;
+}
+
+.table {
+  text-align: center;
+  border: 1px solid #bfbfbf;
+}
+
+.line {
+  margin-top: 150px;
+  border-bottom: 1px solid #bfbfbf;
+}
+
+.button {
+  border: 0;
+  background-color: #ddad88;
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.bigButton {
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  width: 130px;
+  height: 35px;
+}
+
+.smallButton {
+  width: 80px;
+}
+
+@media screen and (max-width: 800px) 
+{
+  .column2, .column1
+    {
+       width: 100%;
+       min-width: 30vmin;
+    }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-out {
+  from { opacity: 1;}
+  to   { opacity: 0;}
+}
+
+@keyframes fade-in {
+  from { opacity: 0;}
+  to   { opacity: 1;}
+}
+
