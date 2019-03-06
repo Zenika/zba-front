@@ -26,7 +26,12 @@ class IsRecipe extends Component {
                 <td>{recipe.malt}</td>
                 <td>{recipe.creator}</td>
                 <td>
-                  <button className="button smallButton">Edit</button>
+                  <button className="button smallButton" onClick={() => this.props.edit(
+                    recipe.name,
+                    recipe.ingredientType,
+                    recipe.malt,
+                    recipe.creator,
+                    recipe.id)}>Edit</button>
                   <button className="button smallButton" onClick={() => this.props.delete(recipe.name)}>Delete</button>
                 </td>
               </tr>
@@ -80,7 +85,7 @@ class RecipeTable extends Component {
       <div className="column2">
         <div className="inside">
           <h1>List recipe</h1>
-          <IsRecipe recipe={this.state.recipe} delete={this.Delete}/>
+          <IsRecipe recipe={this.state.recipe} delete={this.Delete} edit={this.props.setEdit}/>
         </div>
       </div>
     )
