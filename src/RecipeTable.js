@@ -7,7 +7,6 @@ class IsRecipe extends Component {
     if(this.props.recipe.length === 0) {
       return(<h2>there is no recipe :'(</h2>)
     } else {
-      console.log(this.props.recipe)
       return (
         <table className="table">
           <thead>
@@ -40,9 +39,12 @@ class IsRecipe extends Component {
 }
 
 class RecipeTable extends Component {
-  state = {
-    recipe: []
-  }
+  constructor(props) {
+    super(props)
+    this.state = {
+      recipe: []
+    }
+  }  
 
   /*Affiche la table des recettes au démarrage de la page*/
   componentDidMount() {
@@ -65,7 +67,7 @@ class RecipeTable extends Component {
     }
   }
 
-  Delete(i) {
+  Delete = i => {
     axios.delete('http://localhost:8080/Recipe'+i)
       .then((result) => {
         console.log("Succesfully deleted")
