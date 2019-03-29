@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import IsRecipe from './IsRecipe'
-import "./App.css"
+import "../../css/App.css"
 
 class RecipeTable extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class RecipeTable extends Component {
     this.state = {
       recipe: []
     }
-  }  
+  }
 
   /*Affiche la table des recettes au démarrage de la page*/
   componentDidMount() {

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {Route,HashRouter} from "react-router-dom"
 import Welcome from "./Welcome"
 import Home from "./Home"
-import './App.css'
+import '../../css/App.css'
 
 class App extends Component {
 
