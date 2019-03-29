@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import "./App.css"
+import "../../css/App.css"
 
 class AppRecipe extends Component {
   render() {
@@ -7,7 +7,7 @@ class AppRecipe extends Component {
     return(
       <div className="column1">
         <div className="inside">
-          <h1>{this.props.state.editMode ? "Edit" : "Create"} recipe</h1>
+          <h1>{this.props.state.control.editMode ? "Edit" : "Create"} recipe</h1>
           <form onSubmit={this.props.onSubmit}>
             <label>Recipe</label>
             <br/><br/>
@@ -25,8 +25,8 @@ class AppRecipe extends Component {
             <br/><br/>
             <input type="text" name="field" id="creator" value={creator} onChange={this.props.onChange}/>
             <br/><br/><br/>
-            <button className="button bigButton">{this.props.state.editMode ? "Update" : "Add new"} recipe</button>
-            {this.props.state.editMode ? <button className="button xButton" onClick={() => this.props.setEdit(name)}>X</button> : ''}
+            <button className="button bigButton">{this.props.state.control.editMode ? "Update" : "Add new"} recipe</button>
+            {this.props.state.control.editMode ? <button className="button xButton" onClick={() => this.props.setEdit(name)}>X</button> : ''}
           </form>
         </div>
       </div>

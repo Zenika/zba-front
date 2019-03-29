@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logo from './zenika.svg';
-import './App.css';
+import logo from '../../zenika.svg';
+import '../../css/App.css'
 
 class Welcome extends Component {
 
