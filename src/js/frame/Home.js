@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RecipeTable from '../Recipe/RecipeTable'
 import AddRecipe from '../Recipe/AddRecipe'
-import StageParam from '../Recipe/StageParam'
+import RecipeStep from '../Recipe/RecipeStep'
 import Grafana from '../../Grafana'
 import logo from '../../zba.svg';
 import axios from 'axios';
@@ -69,7 +69,7 @@ class Home extends Component {
   }
 
   onChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value }, () =>{
+    this.setState({ [e.target.id]: e.target.value }, () => {
         if(this.state.name !==''  || this.state.ingredientType !=='' || this.state.malt !=='' || this.state.creator !=='') {
             this.setState(prevState => ({control:{showRecipeTable: false}}))
         } else {
@@ -103,15 +103,15 @@ class Home extends Component {
 	    	<header className="App-header">
           		<img src={logo} className="Zba-logo" alt="logo" />
 	    	</header>,
-        <div className="wrapper">
-          <AddRecipe onSubmit={this.onSubmit} onChange={this.onChange} state={this.state} setEdit={this.setEdit}/>
-          {this.state.control.showRecipeTable ?
-            (<RecipeTable setEdit={this.setEdit} update={this.state.update} setUpdate={this.setUpdate}/>)
-            :
-            (<StageParam/>)
-          }
-          <Grafana/>
-        </div>
+            <div className="wrapper">
+                <AddRecipe onSubmit={this.onSubmit} onChange={this.onChange} state={this.state} setEdit={this.setEdit}/>
+                {this.state.control.showRecipeTable ?
+                    (<RecipeTable setEdit={this.setEdit} update={this.state.update} setUpdate={this.setUpdate}/>)
+                    :
+                    (<RecipeStep/>)
+                }
+                <Grafana/>
+            </div>
     	</div>
     )
   }
