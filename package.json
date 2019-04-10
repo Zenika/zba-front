@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "array-move": "^2.1.0",
     "axios": "^0.18.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.5"
+    "react-scripts": "2.1.5",
+    "react-sortable": "^2.0.0",
+    "react-sortable-hoc": "^1.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,5 +26,17 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zenika/zba-front.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zenika/zba-front/issues"
+  },
+  "homepage": "https://github.com/Zenika/zba-front#readme"
 }
