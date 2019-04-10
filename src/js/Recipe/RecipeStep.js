@@ -1,40 +1,56 @@
 import React, { Component } from 'react';
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 import Step from './Step'
 import "../../css/App.css"
+
+const SortableItem = SortableElement(({value}) => <div>{value}</div>)
+
+const SortableList = SortableContainer(({steps}) => {
+    return (
+        <div>
+            {steps.map((value, index) => (
+                <SortableItem key={`item-${index}`} index={index} value={value} />
+            ))}
+        </div>
+    )
+})
 
 class RecipeStep extends Component {
 
     constructor() {
         super()
         this.state = {
-            step: [], // to pull from the data base
-            stepNumber: 0
+            steps: [], // to pull from the data base
+            stepId: 0
         }
     }
 
     handleNewClick = () => {
-        const step = this.state.step
-        let stepNumber = this.state.stepNumber
-        stepNumber++
-        this.setState({step: step.concat([stepNumber]),stepNumber: stepNumber})
+        const steps = this.state.steps
+        const length = this.state.steps.length
+        let stepId = this.state.stepId
+        stepId++
+        this.setState({
+            steps: steps.concat([<Step stepId={stepId} indexNumber={length} x={this.handleXClick}/>]),
+            stepId: stepId},
+            () => console.log(this.state.steps))
     }
 
-    handleXClick = (number) => {
-        const step = this.state.step.filter((value) => value !== number)
-        this.setState({step: step,}, () => console.log(this.state.step))
+    handleXClick = (indexNumber) => {
+        var array = []
+        this.state.steps.forEach((element, index) => {
+            if(index !== indexNumber) {
+                array = array.concat(element)
+            }
+        });
+        console.log(array)
+        this.setState({steps: array}, () => console.log(this.state.steps))
     }
 
-    createComponent = () => {
-        const number = this.state.stepNumber
-        return (
-            <div>
-                <Step number={number} x={() => this.handleXClick(number)}/>
-            </div>
-        )
-    }
-
-    createComponents(component) {
-        return component.map(this.createComponent)
+    onSortEnd = ({oldIndex, newIndex}) => {
+            this.setState(({steps}) => ({steps: arrayMove(steps, oldIndex, newIndex)
+        }))
     }
 
     render() {
@@ -50,7 +66,7 @@ class RecipeStep extends Component {
                     <div>
                         <h2>Brewing</h2>
                         <div>Add step :</div>
-                        {this.createComponents(this.state.step)}
+                        <SortableList steps={this.state.steps} onSortEnd={this.onSortEnd}/>
                         <button className="button" onClick={() => this.handleNewClick()}>
                             <strong>New</strong>
                         </button>
