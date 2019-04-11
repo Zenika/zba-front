@@ -4,7 +4,7 @@ import arrayMove from 'array-move';
 import Step from './Step'
 import "../../css/App.css"
 
-const SortableItem = SortableElement(({value}) => <div>{value}</div>)
+const SortableItem = SortableElement(({value}) => <div>{value.component}</div>)
 
 const SortableList = SortableContainer(({steps}) => {
     return (
@@ -22,25 +22,24 @@ class RecipeStep extends Component {
         super()
         this.state = {
             steps: [], // to pull from the data base
-            stepId: 0
+            id: 0
         }
     }
 
     handleNewClick = () => {
         const steps = this.state.steps
-        const length = this.state.steps.length
-        let stepId = this.state.stepId
-        stepId++
+        let id = this.state.id
+        id++
         this.setState({
-            steps: steps.concat([<Step stepId={stepId} indexNumber={length} x={this.handleXClick}/>]),
-            stepId: stepId},
+            steps: steps.concat([{component: <Step id={id} x={this.handleXClick}/>, id: id}]),
+            id: id},
             () => console.log(this.state.steps))
     }
 
-    handleXClick = (indexNumber) => {
+    handleXClick = (id) => {
         var array = []
-        this.state.steps.forEach((element, index) => {
-            if(index !== indexNumber) {
+        this.state.steps.forEach((element) => {
+            if(element.id !== id) {
                 array = array.concat(element)
             }
         });
