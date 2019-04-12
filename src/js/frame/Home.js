@@ -34,7 +34,7 @@ class Home extends Component {
   }
 
   delay(ms) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         setTimeout(resolve, ms);
     });
   }

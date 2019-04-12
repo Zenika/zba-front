@@ -21,19 +21,45 @@ class RecipeStep extends Component {
     constructor() {
         super()
         this.state = {
-            steps: [], // to pull from the data base
+            steps: [{
+                component: null,
+                selectedStep: null,
+                description: null,
+                id: null
+            }], // to pull from the data base
             id: 0
         }
     }
 
-    handleNewClick = () => {
-        const steps = this.state.steps
-        let id = this.state.id
-        id++
-        this.setState({
-            steps: steps.concat([{component: <Step id={id} x={this.handleXClick}/>, id: id}]),
-            id: id},
-            () => console.log(this.state.steps))
+    handleSelectedStep = (id, selectedStep) => {
+        this.setState(state => {
+            const array = state.steps.map((element) => {
+                if(element.id === id) {
+                    const newElement = element
+                    newElement.selectedStep = selectedStep
+                    console.log(newElement)
+                    return newElement
+                } else {
+                    return element
+                }
+            })
+            return array
+        })
+    }
+
+    handleDescription = (id,text) => {
+        this.setState(state => {
+            const array = state.steps.map((element) => {
+                if(element.id === id) {
+                    const newElement = element
+                    newElement.description = text
+                    return newElement
+                } else {
+                    return element
+                }
+            })
+            return array
+        })
     }
 
     handleXClick = (id) => {
@@ -42,14 +68,55 @@ class RecipeStep extends Component {
             if(element.id !== id) {
                 array = array.concat(element)
             }
-        });
-        console.log(array)
-        this.setState({steps: array}, () => console.log(this.state.steps))
+        })
+        this.setState({steps: array})
+    }
+
+    handleNewClick = () => {
+        const steps = this.state.steps
+        let id = this.state.id
+        let text= ""
+        this.setState({
+            steps: steps.concat([{
+                component: null,
+                selectedStep: 1,
+                description: null,
+                id: id
+            }])
+        },() => {
+            this.state.steps.forEach((element) => {
+                if(element.id === id) {
+                    text = element.description
+                }
+            })
+            this.setState(state => {
+                const array = state.steps.map((element) => {
+                    if(element.id === id) {
+                        const newElement = element
+                        newElement.component = <Step
+                            x={this.handleXClick}
+                            selectedStep={this.handleSelectedStep}
+                            description={text}
+                            descriptionChange={this.handleDescription}
+                            id={id}
+                        />
+                        return newElement
+                    } else {
+                        return element
+                    }
+                })
+                return array
+            }, () => {
+                id++
+                this.setState({id: id})
+            })
+        })
     }
 
     onSortEnd = ({oldIndex, newIndex}) => {
             this.setState(({steps}) => ({steps: arrayMove(steps, oldIndex, newIndex)
         }))
+        console.log(this.state.steps)
     }
 
     render() {
