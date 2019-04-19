@@ -3,7 +3,7 @@ import "../../css/App.css"
 
 class AppRecipe extends Component {
   render() {
-    const { name, ingredientType, malt, creator } = this.props.state
+    const { name, ingredientType, malt, creator } = this.props.state.recipe
     return(
       <div className="column1">
         <div className="inside">
