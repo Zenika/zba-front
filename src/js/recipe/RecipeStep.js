@@ -4,7 +4,10 @@ import arrayMove from 'array-move';
 import Step from './Step'
 import "../../css/App.css"
 
-const SortableItem = SortableElement(({value}) => <div>{value.component}</div>)
+const SortableItem = SortableElement(({value}) => {
+    console.log(value)
+    return <div>{value.component}</div>
+})
 
 const SortableList = SortableContainer(({steps}) => {
     return (

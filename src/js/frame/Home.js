@@ -11,12 +11,12 @@ class Home extends Component {
     constructor() {
         super()
         this.state = {
+            recipeId: '',
             recipe: {
                 name:'',
                 ingredientType:'',
                 malt:'',
                 creator:'',
-                recipeId: ''
             },
             recipeSteps: {
                 steps: [],
@@ -52,50 +52,33 @@ class Home extends Component {
     }
 
     setUpdate = () => {
-        this.delay(200).then(() => {
-            this.setState(prevState => ({update: !prevState.update}))
-        })
+        this.setState(prevState => ({update: !prevState.update}))
     }
 
-    // QUESTION la seconde recrète crud (pour steps) vaut'il mieux l'exécuter à la chine ou das le callbacks de la précédente ?
     onSubmit = (e) => {
         e.preventDefault()
-        const { name, ingredientType, malt, creator, id } = this.state.recipe
-        const { listSteps, listId } = this.state.recipeSteps
+        const recipeId = this.state.recipeId
+        const recipe = this.state.recipe
+        const recipeSteps = this.state.recipeSteps
         if(this.state.control.editMode === false) {
-            axios.post('http://localhost:8080/Recipe', { name, ingredientType, malt, creator, listSteps, listId })
+            axios.post('http://localhost:8080/Recipe', { recipe, recipeSteps })
             .then((result) => {
-                console.log("Recipe succesfully posted")
-                console.log( name, ingredientType, malt, creator )
+                console.log(`Succesfully posted id = ${result.data}`)
+                this.setState(prevState => ({recipeId: result.data}), () => console.log( recipe, recipeSteps ))
+                this.initState()
+                this.setState(prevState => ({control:{editMode: false, showRecipeTable: true}}))
+                this.setState(prevState => ({update: !prevState.update}))
             })
-            this.initState()
-            this.setState(prevState => ({control:{editMode: false, showRecipeTable: true}}))
-            this.setUpdate()
-            for(let i=0;i<this.state.recipeSteps.steps.length;i++){
-                let description = this.state.list.steps[i].description
-                let selectedStep = this.state.list.steps[i].selectedStep
-                axios.post('http://localhost:8080/Steps', { selectedStep, description })
-                .then((result) => {
-                    console.log("Step succesfully posted")
-                });
-            }
         } else {
-            axios.put('http://localhost:8080/Recipe', {id, name, ingredientType, malt, creator })
+            console.log()
+            axios.put('http://localhost:8080/Recipe', { recipeId, recipe, recipeSteps })
             .then((result) => {
-                console.log("Succesfully update")
-                console.log(id, name, ingredientType, malt, creator )
+                console.log(`Succesfully updated id = ${result.data}`)
+                this.setState(prevState => ({recipeId: result.data}), () => console.log( recipe, recipeSteps ))
+                this.initState()
+                this.setState(prevState => ({control:{editMode: false, showRecipeTable: true}}))
+                this.setState(prevState => ({update: !prevState.update}))
             })
-            for(let i=0;i<this.state.recipeSteps.steps.length;i++){
-                let description = this.state.list.steps[i].description
-                let selectedStep = this.state.list.steps[i].selectedStep
-                axios.put('http://localhost:8080/Steps', { selectedStep, description })
-                .then((result) => {
-                    console.log("Step succesfully updated")
-                });
-            }
-            this.initState()
-            this.setState(prevState => ({control:{editMode: false, showRecipeTable: true}}))
-            this.setUpdate() 
         }
     }
 
@@ -118,16 +101,28 @@ class Home extends Component {
             this.setState(prevState => ({control:{editMode: false}}))
             this.setState(prevState => ({control:{showRecipeTable: true}}))
         } else {
-            this.setState(prevState => ({control:{editMode: true}}))
             this.setState({
+                recipeId: id,
                 recipe: {
                     name: name,
                     ingredientType: ingredientType,
                     malt: malt,
-                    creator: creator,
-                    recipeId: id
+                    creator: creator
                 }
             })
+            if(id != '') {
+                axios.get(`http://localhost:8080/Steps${id}`)
+                .then(result => {
+                    console.log(result.data)
+                    const res = result.data
+                    this.setState({ recipeSteps: {steps: res} }, () => 
+                        this.setState(prevState => ({control:{editMode: true}}))
+                    );
+                    this.setUpdate()
+                })
+            } else {
+                this.setState(prevState => ({control:{editMode: true}}))
+            }
         }
     }
 
