@@ -39,7 +39,7 @@ class RecipeStep extends Component {
                         <h2>Brewing</h2>
                         <div>Add step :</div>
                         <SortableList steps={this.props.steps} onSortEnd={this.onSortEnd}/>
-                        <button className="button" onClick={() => this.handleNewClick()}>
+                        <button className="button" onClick={() => this.props.handleNewClick()}>
                             <strong>New</strong>
                         </button>
                     </div>

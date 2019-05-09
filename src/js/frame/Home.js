@@ -97,7 +97,7 @@ class Home extends Component {
     }
 
     setEdit = (name,ingredientType,malt,creator,id) => {
-        if(this.state.name === name) {
+        if(this.state.recipe.name === name) {
             this.initState()
             this.setState(prevState => ({control:{editMode: false}}))
             this.setState(prevState => ({control:{showRecipeTable: true}}))
@@ -124,12 +124,10 @@ class Home extends Component {
                                 handleOnChange={this.handleOnChange}
                                 id={element.id}
                             />,
-                            selectedStep: element.selectedStep,
+                            selectedStep: element.selectedStep.toString(10),
                             description: element.description,
                             id: element.id
                         })
-                        this.handleOnChange(element.id, 2, "selectedStep")
-                        console.log(this.getValue(this.state.recipeSteps.steps[0].id,"selectedStep"))
                     })
                     this.setState({ recipeSteps: {steps: steps} }, () =>
                         this.setState(prevState => ({control:{editMode: true}}))
@@ -219,7 +217,7 @@ class Home extends Component {
                     {this.state.control.showRecipeTable ?
                         (<RecipeTable setEdit={this.setEdit} update={this.state.update} setUpdate={this.setUpdate}/>)
                         :
-                        (<RecipeStep steps={this.state.recipeSteps.steps} setListSteps={this.setListSteps} />)
+                        (<RecipeStep steps={this.state.recipeSteps.steps} setListSteps={this.setListSteps} handleNewClick={this.handleNewClick}/>)
                     }
                     <Grafana/>
                 </div>

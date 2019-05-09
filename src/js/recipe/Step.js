@@ -22,7 +22,8 @@ class Step extends Component {
 
     selectedStep = () => {
         let stepToPrint
-        switch (this.props.getValue(this.props.id,"selectedStep")) {
+        const test = this.props.getValue(this.props.id,"selectedStep")
+        switch (test) {
             case "1" :
                 stepToPrint = <span>
                     <Description id={this.props.id}
