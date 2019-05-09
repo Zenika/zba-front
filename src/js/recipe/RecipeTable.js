@@ -36,8 +36,8 @@ class RecipeTable extends Component {
     axios.delete('http://localhost:8080/Recipe'+i)
       .then((result) => {
         console.log("Succesfully deleted")
+        this.props.setUpdate()
     });
-    this.props.setUpdate()
   }
 
   render() {
