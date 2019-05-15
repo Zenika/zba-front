@@ -188,20 +188,21 @@ class Home extends Component {
     }
 
     handleOnChange = (id, value, subElement) => {
-        console.log("home -> handleOnChange : " + value)
         const array = this.state.recipeSteps.steps.map((element) => {
             if(element.id === id) {
                 const newElement = element
                 newElement[subElement] = value
-                console.log(newElement)
                 return newElement
             } else {
                 return element
             }
         })
-        console.log("home -> handleOnChange : " + this.state.recipeStep + "||" + array)
-        if(this.state.recipeSteps !== array) {
-            console.log("home -> handleOnChange -> condition : " + array)
+        console.log(this.state.recipeSteps.steps)
+        console.log(array)
+        // check the onChange to avoid infinit loop rendering
+        console.log("OUTSIDE")
+        if( Object.is(this.state.recipeSteps.steps,array)) {
+            console.log("INSIDE")
             this.setListSteps(array)
         }
     }

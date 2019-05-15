@@ -27,8 +27,10 @@ class Step extends Component {
     }
 
     handleOnChange = (subElement) => {
+        console.log("step")
         const e = document.getElementById("description"+this.props.id+"step"+this.props.getValue(this.props.id,"selectedStep"))
         if(e) {
+            console.log("if")
             e.addEventListener("keydown",this.autoSize(e))
             this.props.handleOnChange(this.props.id,e.value,subElement)
         }
