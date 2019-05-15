@@ -1,22 +1,51 @@
-import React, { Component } from 'react';
+import React from 'react';
 import "../../../css/App.css"
 
-class Brewing extends Component {
-    
-    render() {
-        return (
-            <span>
-                Time : <input type="number" name="hours" size="2"></input>H<span>
-                    </span><input type="number" name="minutes" size="2"></input>min<span>  </span>
-                Heat : <input type="number" name="heat"></input><span>  </span>
-                Water : <input type="number" name="water" min="0"></input>L<span>  </span>
+function Brewing (props) {
+    return (
+        <div className="subStep">
+            <div >
+                Time : <input
+                    className="inputNumber"
+                    type="number"
+                    id={"timeH"+props.id+"step"+props.getValue(props.id,"selectedStep")}
+                    value={props.getValue(props.id,"timeH")}
+                    name="timeH"
+                    size="2" max="24" min="0" >
+                </input>h<span>
+                </span><input 
+                    className="inputNumber"
+                    type="number"
+                    id={"timeMin"+props.id+"step"+props.getValue(props.id,"selectedStep")}
+                    value={props.getValue(props.id,"timeMin")}
+                    name="timeMin"
+                    size="2" max="59" min="0">
+                </input>min<span></span>
+            </div>
+            <div>
+                Heat : <input
+                    className="inputNumber"
+                    type="number"
+                    id={"heat"+props.id+"step"+props.getValue(props.id,"selectedStep")}
+                    value={props.getValue(props.id,"heat")}
+                    name="heat">
+                </input>°C
+            </div>
+            <div>
+                Water : <input
+                    className="inputNumber"
+                    type="number"
+                    id={"water"+props.id+"step"+props.getValue(props.id,"selectedStep")}
+                    value={props.getValue(props.id,"water")}
+                    name="water"
+                    min="0">
+                </input>L<span>  </span>
+            </div>
+            <div>
                 Hopper : <input type="text"/>
-                <button className="button">
-                    <strong>Add stage</strong>
-                </button>
-            </span>
-        )
-    }
+            </div>
+        </div>
+    )
 }
 
 export default Brewing

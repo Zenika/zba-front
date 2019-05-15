@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import RecipeTable from '../recipe/RecipeTable'
 import AddRecipe from '../recipe/AddRecipe'
 import RecipeStep from '../recipe/RecipeStep'
-import Grafana from '../../Grafana'
+//import Grafana from '../../Grafana'
 import logo from '../../zba.svg';
 import axios from 'axios';
 import '../../css/App.css'
@@ -12,7 +12,7 @@ class Home extends Component {
     constructor() {
         super()
         this.state = {
-            recipeId: '',
+            recipeId:0,
             recipe: {
                 name:'',
                 ingredientType:'',
@@ -23,6 +23,13 @@ class Home extends Component {
                 steps: [],
                 nextStepId: 0
             },
+            ingredient: {
+                oxygen_powder: '',
+                malt: [],
+                hopper: [],
+                leaven: []
+            },
+            furnitures: {},
             update:true,
             control : {
                 editMode: false,
@@ -33,6 +40,7 @@ class Home extends Component {
 
     initState() {
         this.setState({
+            recipeId:0,
             recipe: {
                 name: '',
                 ingredientType: '',
@@ -44,12 +52,6 @@ class Home extends Component {
                 nextStepId: 0
             }
         })
-    }
-
-    delay(ms) {
-        return new Promise(function (resolve) {
-            setTimeout(resolve, ms);
-        });
     }
 
     setUpdate = () => {
@@ -71,7 +73,6 @@ class Home extends Component {
                 this.setState(prevState => ({update: !prevState.update}))
             })
         } else {
-            console.log()
             axios.put('http://localhost:8080/Recipe', { recipeId, recipe, recipeSteps })
             .then((result) => {
                 console.log(`Succesfully updated id = ${result.data}`)
@@ -117,17 +118,38 @@ class Home extends Component {
                     let steps = this.state.recipeSteps.steps
                     let id = this.state.recipeSteps.nextStepId
                     result.data.forEach((element) => {
-                        steps.push({
-                            component: <Step
-                                x={this.handleXClick}
-                                getValue={this.getValue}
-                                handleOnChange={this.handleOnChange}
-                                id={element.id}
-                            />,
-                            selectedStep: element.selectedStep.toString(10),
-                            description: element.description,
-                            id: element.id
-                        })
+                        switch (element.selectedStep) {
+                            case 3 :
+                                steps.push({
+                                    component: <Step
+                                        x={this.handleXClick}
+                                        getValue={this.getValue}
+                                        handleOnChange={this.handleOnChange}
+                                        id={element.id}
+                                    />,
+                                    selectedStep: element.selectedStep.toString(10),
+                                    description: element.description,
+                                    heat: element.heat,
+                                    timeMin: element.timeMin,
+                                    timeH: element.timeH,
+                                    water: element.water,
+                                    id: element.id
+                                })
+                            break
+                            default:
+                            steps.push({
+                                component: <Step
+                                    x={this.handleXClick}
+                                    getValue={this.getValue}
+                                    handleOnChange={this.handleOnChange}
+                                    id={element.id}
+                                />,
+                                selectedStep: element.selectedStep.toString(10),
+                                description: element.description,
+                                id: element.id
+                            })
+                        }
+                        
                     })
                     this.setState({ recipeSteps: {steps: steps} }, () =>
                         this.setState(prevState => ({control:{editMode: true}}))
@@ -145,7 +167,8 @@ class Home extends Component {
     setListSteps = (newSteps) => {
         let object = this.state.recipeSteps
         object.steps = newSteps
-        this.setState({recipeSteps: object}, () => console.log(this.state.recipeSteps))
+        this.setState({recipeSteps: object},
+            console.log("home -> setListSteps -> callback : "+newSteps))
     }
 
     setListId = (newId) => {
@@ -165,16 +188,22 @@ class Home extends Component {
     }
 
     handleOnChange = (id, value, subElement) => {
+        console.log("home -> handleOnChange : " + value)
         const array = this.state.recipeSteps.steps.map((element) => {
             if(element.id === id) {
                 const newElement = element
                 newElement[subElement] = value
+                console.log(newElement)
                 return newElement
             } else {
                 return element
             }
         })
-        this.setListSteps(array)
+        console.log("home -> handleOnChange : " + this.state.recipeStep + "||" + array)
+        if(this.state.recipeSteps !== array) {
+            console.log("home -> handleOnChange -> condition : " + array)
+            this.setListSteps(array)
+        }
     }
 
     handleXClick = (id) => {
@@ -217,9 +246,8 @@ class Home extends Component {
                     {this.state.control.showRecipeTable ?
                         (<RecipeTable setEdit={this.setEdit} update={this.state.update} setUpdate={this.setUpdate}/>)
                         :
-                        (<RecipeStep steps={this.state.recipeSteps.steps} setListSteps={this.setListSteps} handleNewClick={this.handleNewClick}/>)
+                        (<RecipeStep steps={this.state.recipeSteps.steps} ingredient={this.state.ingredient} setListSteps={this.setListSteps} handleNewClick={this.handleNewClick}/>)
                     }
-                    <Grafana/>
                 </div>
             </div>
         )

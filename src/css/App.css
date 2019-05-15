@@ -71,6 +71,75 @@
   margin-bottom: 10vmin;
 }
 
+.steps-border {
+    border-radius: 3px 3px 3px 3px;
+    border: 1px solid grey;
+    background-color: #f6f7f8;
+    margin-bottom: 10vmin;
+}
+
+.step-details {
+    height:5vmin;
+    margin-left: 1vmin;
+    border-radius: 2px 2px 2px 2px;
+    border: 1px solid gray;
+}
+
+.subStep {
+    border-radius: 3px 3px 3px 3px;
+    border: 1px solid grey;
+    margin-left: 1vmin;
+    margin-bottom: 1vmin;
+    padding-left: 1vmin;
+    padding-top: 1vmin;
+    padding-bottom: 1vmin;
+    padding-right: 1vmin;
+}
+
+.step {
+    border-radius: 3px 3px 3px 3px;
+    border: 1px solid grey;
+    margin-left: 1vmin;
+    margin-bottom: 1vmin;
+    padding-left: 1vmin;
+    padding-top: 1vmin;
+    padding-bottom: 1vmin;
+    padding-right: 1vmin;
+}
+
+
+
+.steps {
+    border-radius: 3px 3px 3px 3px;
+    border: 1px solid grey;
+    margin-right: 5vmin;
+    margin-left: 3vmin;
+    margin-top: 1vmin;
+    padding-left: 1vmin;
+    padding-right: 1vmin;
+    padding-top: 1vmin;
+    padding-bottom: 1vmin;
+    background-color: #ffffff;
+}
+
+.flexbox-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.float-right {
+    float: right;
+}
+
+.new {
+    height:5vmin;
+    margin-top: 2vmin;
+}
+
+.inputNumber {
+    width: 30px;
+}
+
 .table {
   text-align: center;
   border: 1px solid #bfbfbf;

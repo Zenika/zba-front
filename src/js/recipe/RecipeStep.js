@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import Ingredient from "./ingredient/Ingredient"
 import "../../css/App.css"
 
 const SortableItem = SortableElement(({value}) => {
@@ -33,15 +34,20 @@ class RecipeStep extends Component {
                     <div>
                         <h2>Preparation</h2>
                         <div>List of ingredient :</div>
-                        <div>Add furnitures :</div>
+                        <Ingredient steps={this.props.steps}s ingredient={this.props.Ingredient}/>
+                        <div>List of furnitures :</div>
                     </div>
                     <div>
                         <h2>Brewing</h2>
-                        <div>Add step :</div>
-                        <SortableList steps={this.props.steps} onSortEnd={this.onSortEnd}/>
-                        <button className="button" onClick={() => this.props.handleNewClick()}>
-                            <strong>New</strong>
-                        </button>
+                        <div className="steps-border">
+                            <div style={{marginLeft: "10px", marginTop: "10px", marginBottom: "10px"}} >
+                                <h3>Add step :</h3>
+                                <SortableList steps={this.props.steps} onSortEnd={this.onSortEnd}/>
+                                <button className="button new" onClick={() => this.props.handleNewClick()}>
+                                    <strong>New</strong>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
