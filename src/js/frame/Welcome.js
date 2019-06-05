@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom"
 import logo from '../../zenika.svg';
 import '../../css/App.css'
 
@@ -21,14 +22,15 @@ class Welcome extends Component {
   handleClick = () => {
     this.setState({isClicked: true})
     this.delay(500).then(() => {
-      this.setState({style: "Welcome-header Font App-out"})
-      this.delay(500).then(() => {
-        this.props.handleClick()})
+        this.setState({style: "Welcome-header Font App-out"})
+        this.delay(500).then(() => {
+            this.props.history.push('/HomeBrewing')
+        })
     })
   }
 
   render() {
-    const isClicked = this.state.isClicked
+      const isClicked = this.state.isClicked
     return (
       <div className="App">
         <header className={this.state.style} onClick = {() => this.handleClick()}>
@@ -41,8 +43,8 @@ class Welcome extends Component {
           )}
         </header>
       </div>
-    );
+    )
   }
 }
 
-export default Welcome;
+export default withRouter(Welcome)

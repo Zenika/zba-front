@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+import BurgerMenu from "./menu/BurgerMenu";
 import RecipeTable from '../recipe/RecipeTable'
 import AddRecipe from '../recipe/AddRecipe'
 import RecipeStep from '../recipe/RecipeStep'
-//import Grafana from '../../Grafana'
-import logo from '../../zba.svg';
-import axios from 'axios';
-import '../../css/App.css'
 import Step from '../recipe/Step'
+import logo from '../../zba.svg'
+import axios from 'axios'
+import '../../css/App.css'
+import '../../css/Burger.css'
+import {jsonRecipe} from '../functions/json'
 
-class Home extends Component {
+class HomeRecipe extends Component {
     constructor() {
         super()
         this.state = {
@@ -32,7 +34,7 @@ class Home extends Component {
             furnitures: {},
             update:true,
             control : {
-                editMode: false,
+                updateOrAdd: false,
                 showRecipeTable: true
             }
         }
@@ -58,27 +60,32 @@ class Home extends Component {
         this.setState(prevState => ({update: !prevState.update}))
     }
 
+    
     onSubmit = (e) => {
         e.preventDefault()
         const recipeId = this.state.recipeId
         const recipe = this.state.recipe
         const recipeSteps = this.state.recipeSteps
-        if(this.state.control.editMode === false) {
-            axios.post('http://localhost:8080/Recipe', { recipe, recipeSteps })
+        if(this.state.control.updateOrAdd === false) {
+            console.log("post")
+            const json = jsonRecipe(recipeId, recipe, recipeSteps)
+            console.log(json)
+            axios.post('http://localhost:8080/recipe', {json})
             .then((result) => {
                 console.log(`Succesfully posted id = ${result.data}`)
                 this.setState(prevState => ({recipeId: result.data}), () => console.log( recipe, recipeSteps ))
                 this.initState()
-                this.setState(prevState => ({control:{editMode: false, showRecipeTable: true}}))
+                this.setState(prevState => ({control:{updateOrAdd: false, showRecipeTable: true}}))
                 this.setState(prevState => ({update: !prevState.update}))
             })
         } else {
-            axios.put('http://localhost:8080/Recipe', { recipeId, recipe, recipeSteps })
+            console.log("put")
+            axios.put(`http://localhost:8080/recipe/${recipeId}`, jsonRecipe(recipeId, recipe, recipeSteps))
             .then((result) => {
                 console.log(`Succesfully updated id = ${result.data}`)
                 this.setState(prevState => ({recipeId: result.data}), () => console.log( recipe, recipeSteps ))
                 this.initState()
-                this.setState(prevState => ({control:{editMode: false, showRecipeTable: true}}))
+                this.setState(prevState => ({control:{updateOrAdd: false, showRecipeTable: true}}))
                 this.setState(prevState => ({update: !prevState.update}))
             })
         }
@@ -89,9 +96,9 @@ class Home extends Component {
         object[e.target.id] = e.target.value
         this.setState({ recipe: object }, () => {
             if(this.state.name !==''  || this.state.ingredientType !=='' || this.state.malt !=='' || this.state.creator !=='') {
-                this.setState(prevState => ({control:{showRecipeTable: false}}))
+                this.setState(prevState => ({control:{updateOrAdd: false, showRecipeTable: false}}))
             } else {
-                this.setState(prevState => ({control:{editMode: true, showRecipeTable: true}}))      
+                this.setState(prevState => ({control:{updateOrAdd: true, showRecipeTable: true}}))      
             }
         })
         this.setUpdate()  
@@ -100,8 +107,7 @@ class Home extends Component {
     setEdit = (name,ingredientType,malt,creator,id) => {
         if(this.state.recipe.name === name) {
             this.initState()
-            this.setState(prevState => ({control:{editMode: false}}))
-            this.setState(prevState => ({control:{showRecipeTable: true}}))
+            this.setState(prevState => ({control:{updateOrAdd: false, showRecipeTable: true}}))
         } else {
             this.setState({
                 recipeId: id,
@@ -113,13 +119,31 @@ class Home extends Component {
                 }
             })
             if(id !== '') {
-                axios.get(`http://localhost:8080/Steps${id}`)
+                axios.get(`http://localhost:8080/recipe/${id}/steps`)
                 .then(result => {
                     let steps = this.state.recipeSteps.steps
                     let id = this.state.recipeSteps.nextStepId
-                    result.data.forEach((element) => {
-                        switch (element.selectedStep) {
-                            case 3 :
+                    if(result.data != null) {
+                        result.data.forEach((element) => {
+                            switch (element.selectedStep) {
+                                case 3 :
+                                    steps.push({
+                                        component: <Step
+                                            x={this.handleXClick}
+                                            getValue={this.getValue}
+                                            handleOnChange={this.handleOnChange}
+                                            id={element.id}
+                                        />,
+                                        selectedStep: element.selectedStep.toString(10),
+                                        description: element.description,
+                                        heat: element.heat,
+                                        timeMin: element.timeMin,
+                                        timeH: element.timeH,
+                                        water: element.water,
+                                        id: element.id
+                                    })
+                                break
+                                default:
                                 steps.push({
                                     component: <Step
                                         x={this.handleXClick}
@@ -129,37 +153,27 @@ class Home extends Component {
                                     />,
                                     selectedStep: element.selectedStep.toString(10),
                                     description: element.description,
-                                    heat: element.heat,
-                                    timeMin: element.timeMin,
-                                    timeH: element.timeH,
-                                    water: element.water,
                                     id: element.id
                                 })
-                            break
-                            default:
-                            steps.push({
-                                component: <Step
-                                    x={this.handleXClick}
-                                    getValue={this.getValue}
-                                    handleOnChange={this.handleOnChange}
-                                    id={element.id}
-                                />,
-                                selectedStep: element.selectedStep.toString(10),
-                                description: element.description,
-                                id: element.id
-                            })
-                        }
-                        
-                    })
-                    this.setState({ recipeSteps: {steps: steps} }, () =>
-                        this.setState(prevState => ({control:{editMode: true}}))
-                    )
-                    id++
-                    this.setListId(id)
-                    this.setUpdate()
+                            }
+                        })
+                        this.setState({ recipeSteps: {steps: steps} }, () =>
+                            this.setState(prevState => ({control:{updateOrAdd: true, showRecipeTable:this.state.showRecipeTable}}))
+                        )
+                        id++
+                        this.setListId(id)
+                        this.setUpdate()
+                    } else {
+                        this.setState({ recipeSteps: {steps: steps} }, () =>
+                            this.setState(prevState => ({control:{updateOrAdd: true, showRecipeTable:this.state.showRecipeTable}}))
+                        )
+                        id++
+                        this.setListId(id)
+                        this.setUpdate()
+                    }  
                 })
             } else {
-                this.setState(prevState => ({control:{editMode: true}}))
+                this.setState(prevState => ({control:{updateOrAdd: true, showRecipeTable:this.state.showRecipeTable}}))
             }
         }
     }
@@ -168,7 +182,7 @@ class Home extends Component {
         let object = this.state.recipeSteps
         object.steps = newSteps
         this.setState({recipeSteps: object},
-            console.log("home -> setListSteps -> callback : "+newSteps))
+            console.log("home -> setListSteps -> callback : " + newSteps))
     }
 
     setListId = (newId) => {
@@ -187,6 +201,9 @@ class Home extends Component {
         return details
     }
 
+    handleOnSelectedStep = (id, value) => {
+    }
+
     handleOnChange = (id, value, subElement) => {
         const array = this.state.recipeSteps.steps.map((element) => {
             if(element.id === id) {
@@ -197,12 +214,12 @@ class Home extends Component {
                 return element
             }
         })
-        console.log(this.state.recipeSteps.steps)
-        console.log(array)
+        // console.log(this.state.recipeSteps.steps)
+        // console.log(array)
         // check the onChange to avoid infinit loop rendering
-        console.log("OUTSIDE")
-        if( Object.is(this.state.recipeSteps.steps,array)) {
-            console.log("INSIDE")
+        // console.log("OUTSIDE")
+        if(Object.is(this.state.recipeSteps.steps,array)) {
+            // console.log("INSIDE")
             this.setListSteps(array)
         }
     }
@@ -239,20 +256,23 @@ class Home extends Component {
     render() {
         return (
             <div className="App-in Font">
-                <header className="App-header">
-                    <img src={logo} className="Zba-logo" alt="logo" />
-                </header>,
-                <div className="wrapper">
-                    <AddRecipe onSubmit={this.onSubmit} onChange={this.onChange} state={this.state} setEdit={this.setEdit}/>
-                    {this.state.control.showRecipeTable ?
-                        (<RecipeTable setEdit={this.setEdit} update={this.state.update} setUpdate={this.setUpdate}/>)
-                        :
-                        (<RecipeStep steps={this.state.recipeSteps.steps} ingredient={this.state.ingredient} setListSteps={this.setListSteps} handleNewClick={this.handleNewClick}/>)
-                    }
+                <div id="BurgerMenu">
+                    <BurgerMenu />
+                    <header className="App-header">
+                        <img src={logo} className="Zba-logo" alt="logo" />
+                    </header>,
+                    <div className="wrapper">
+                        <AddRecipe onSubmit={this.onSubmit} onChange={this.onChange} state={this.state} setEdit={this.setEdit}/>
+                        {this.state.control.showRecipeTable ?
+                            (<RecipeTable setEdit={this.setEdit} update={this.state.update} setUpdate={this.setUpdate}/>)
+                            :
+                            (<RecipeStep steps={this.state.recipeSteps.steps} ingredient={this.state.ingredient} setListSteps={this.setListSteps} handleNewClick={this.handleNewClick}/>)
+                        }
+                    </div>
                 </div>
             </div>
         )
     }
 }
 
-export default Home;
+export default HomeRecipe;

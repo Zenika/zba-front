@@ -34,7 +34,7 @@ class RecipeStep extends Component {
                     <div>
                         <h2>Preparation</h2>
                         <div>List of ingredient :</div>
-                        <Ingredient steps={this.props.steps}s ingredient={this.props.Ingredient}/>
+                        <Ingredient steps={this.props.steps} ingredient={this.props.Ingredient}/>
                         <div>List of furnitures :</div>
                     </div>
                     <div>

@@ -13,7 +13,7 @@ class RecipeTable extends Component {
 
   /*Affiche la table des recettes au démarrage de la page*/
   componentDidMount() {
-    axios.get(`http://localhost:8080/Recipe`)
+    axios.get(`http://localhost:8080/recipes`)
       .then(res => {
         const recipe = res.data;
         this.setState({ recipe });
@@ -24,7 +24,7 @@ class RecipeTable extends Component {
   /*Actualise la table des recettes quand un composant est créer*/
   componentDidUpdate(prevProps) {
     if (this.props.update !== prevProps.update) {
-      axios.get(`http://localhost:8080/Recipe`)
+      axios.get(`http://localhost:8080/recipes`)
         .then(res => {
           const recipe = res.data;
           this.setState({ recipe });
@@ -33,7 +33,7 @@ class RecipeTable extends Component {
   }
 
   Delete = i => {
-    axios.delete('http://localhost:8080/Recipe'+i)
+    axios.delete('http://localhost:8080/recipe/'+i)
       .then((result) => {
         console.log("Succesfully deleted")
         this.props.setUpdate()
