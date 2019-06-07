@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import {Route,HashRouter} from "react-router-dom"
+import { BrowserRouter, Route, Switch} from "react-router-dom"
 import Welcome from "./Welcome"
-import Home from "./Home"
 import '../../css/App.css'
+import HomeBrewing from './HomeBrewing';
+import HomeRecipe from './HomeRecipe';
+import Error from './Error'
 
 class App extends Component {
 
@@ -16,19 +18,15 @@ class App extends Component {
   }
 
   render() {
-    const isClicked = this.state.isClicked
     return (
-      <HashRouter>
-        <div>
-          {isClicked ? (
-            <div>
-              <Route path="/" component= {() => <Home />} />
-            </div>
-          ) : (
-            <Route path="/" component= {() => <Welcome handleClick = {this.handleClick}/>} />
-          )}
-        </div>
-      </HashRouter>
+            <BrowserRouter>
+                <Switch>
+                    <Route path="/" component= {Welcome} exact/>
+                    <Route path="/HomeBrewing" component={HomeBrewing} />
+                    <Route path="/HomeRecipe" component={HomeRecipe} />
+                    <Route component={Error} />
+                </Switch>
+            </BrowserRouter>
     )
   }
 }
