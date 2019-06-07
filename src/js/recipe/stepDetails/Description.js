@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react'
 import "../../../css/App.css"
 
-function Description (props) {
-    return (
-        <textarea
-            type="text"
-            id={"description"+props.id+"step"+props.getValue(props.id,"selectedStep")}
-            rows='1'
-            value={props.getValue(props.id,"description")}
-            onChange={props.handleOnChange("description")}
-            placeholder={props.placeholder}
-            className="step-details"/>
-    )
+class Description extends Component {
+
+    handleOnChange = () => {
+        this.props.handleOnChange("description")
+    }
+
+    render() {
+        return (
+            <textarea
+                type="text"
+                id={"description"+this.props.id+"step"+this.props.getValue(this.props.id,"selectedStep")}
+                rows='1'
+                value={this.props.getValue(this.props.id,"description")}
+                onChange={this.handleOnChange}
+                placeholder={this.props.placeholder}
+                className="step-details"/>
+        )
+    }
 }
 
 export default Description

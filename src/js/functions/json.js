@@ -28,13 +28,11 @@ function steps(recipeSteps) {
 
 export function jsonRecipe(recipeId, recipe, recipeSteps) {
     let newRecipe = {
-        recipe : {
-            id: recipeId,
-            name: recipe.name,
-            ingredientType: recipe.ingredientType,
-            malt: recipe.malt,
-            creator: recipe.creator
-        },
+        id: recipeId,
+        name: recipe.name,
+        ingredientType: recipe.ingredientType,
+        malt: recipe.malt,
+        creator: recipe.creator,
         steps: steps(recipeSteps)
     }
     return newRecipe

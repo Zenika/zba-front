@@ -9,6 +9,8 @@ import axios from 'axios'
 import '../../css/App.css'
 import '../../css/Burger.css'
 import {jsonRecipe} from '../functions/json'
+import 'react-sticky-header/styles.css'
+import StickyHeader from 'react-sticky-header'
 
 class HomeRecipe extends Component {
     constructor() {
@@ -70,7 +72,7 @@ class HomeRecipe extends Component {
             console.log("post")
             const json = jsonRecipe(recipeId, recipe, recipeSteps)
             console.log(json)
-            axios.post('http://localhost:8080/recipe', {json})
+            axios.post('http://localhost:8080/recipe', json)
             .then((result) => {
                 console.log(`Succesfully posted id = ${result.data}`)
                 this.setState(prevState => ({recipeId: result.data}), () => console.log( recipe, recipeSteps ))
@@ -201,9 +203,6 @@ class HomeRecipe extends Component {
         return details
     }
 
-    handleOnSelectedStep = (id, value) => {
-    }
-
     handleOnChange = (id, value, subElement) => {
         const array = this.state.recipeSteps.steps.map((element) => {
             if(element.id === id) {
@@ -214,12 +213,7 @@ class HomeRecipe extends Component {
                 return element
             }
         })
-        // console.log(this.state.recipeSteps.steps)
-        // console.log(array)
-        // check the onChange to avoid infinit loop rendering
-        // console.log("OUTSIDE")
-        if(Object.is(this.state.recipeSteps.steps,array)) {
-            // console.log("INSIDE")
+        if(!Object.is(this.state.recipeSteps.steps,array)) {
             this.setListSteps(array)
         }
     }
@@ -258,9 +252,19 @@ class HomeRecipe extends Component {
             <div className="App-in Font">
                 <div id="BurgerMenu">
                     <BurgerMenu />
-                    <header className="App-header">
-                        <img src={logo} className="Zba-logo" alt="logo" />
-                    </header>,
+                    <StickyHeader
+                        // This is the sticky part of the header.
+                        header={    
+                            <header className="App-header">
+                                <img src={logo} className="Zba-logo" alt="logo" />
+                            </header>
+                        }>
+                        <section>
+                        <header className="App-header">
+                                <img src={logo} className="Zba-logo" alt="logo" />
+                            </header>
+                        </section>
+                    </StickyHeader>
                     <div className="wrapper">
                         <AddRecipe onSubmit={this.onSubmit} onChange={this.onChange} state={this.state} setEdit={this.setEdit}/>
                         {this.state.control.showRecipeTable ?
