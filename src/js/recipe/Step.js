@@ -7,6 +7,7 @@ import Density from "./stepDetails/Density"
 import Filtering from "./stepDetails/Filtering"
 import Fermenting from "./stepDetails/Fermenting"
 import Colding from './stepDetails/Colding';
+import Crushing from './stepDetails/Crushing';
 
 class Step extends Component {
 
@@ -49,14 +50,10 @@ class Step extends Component {
             break
             case "2" :
                 stepToPrint = <span className="flexbox-container">
-                    <Description id={this.props.id}
+                    <Crushing 
+                        id={this.props.id}
                         getValue = {this.props.getValue}
-                        handleOnChange = {this.handleOnChange}
-                        placeholder  = "Malt name"/>
-                    <Description id={this.props.id}
-                        getValue = {this.props.getValue}
-                        handleOnChange = {this.handleOnChange}
-                        placeholder  = "Add description"/>
+                        handleOnChange = {this.handleOnChange} />
                 </span>
             break
             case "3" :
